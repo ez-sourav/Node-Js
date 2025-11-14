@@ -12,8 +12,8 @@ const myServer = http.createServer((req,res)=>{
                 
         }
     })
-    console.log(req);
-    console.log("New request received");
+    // console.log(req);
+    // console.log("New request received");
 })
 myServer.listen(3000,()=>{
     console.log('Server Started');
