@@ -10,7 +10,7 @@ Dynamic Path Parameters
 GET /api/users/:id
 :id -> Variable \ Dynamic
 
-POST /api/users - Create new user
+POST /api/users - Create new user  - Done
 
 PATCH /api/users/1 - Edit the user With Id 1
 
