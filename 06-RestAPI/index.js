@@ -35,6 +35,12 @@ app.patch('/api/users/:id',(req,res)=>{
         status:"Pending"
     });
 })
+app.delete('/api/users/:id',(req,res)=>{
+    //TODO: Delete the user with id
+    return res.json({
+        status:"Pending"
+    });
+})
 
 app.listen(3000, () => {
   console.log("Server started");
