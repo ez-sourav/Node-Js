@@ -1,45 +1,87 @@
 const express = require("express");
 const users = require("./USER_DATA.json");
+const fs = require("fs");
 
 const app = express();
+app.use(express.urlencoded({ extended: false }));
 
-// app.get("/users", (req, res) => {
-//   const html = `
-//     <ul>
-//     ${users.map((user) => `<li>${user.first_name}</li>`).join("")}
-//     </ul>
-//     `;
-//   res.send(html);
-// });
+app.get("/users", (req, res) => {
+  const html = `
+    <ul>
+    ${users.map((user) => `<li>${user.first_name}</li>`).join("")}
+    </ul>
+    `;
+  res.send(html);
+});
 
 //Routes
 app.get("/api/users", (req, res) => {
   return res.json(users);
 });
 
-
-// if route same so we can do this type 
-app.route('/api/users/:id').get((req,res)=>{
-    const id =parseInt(req.params.id);
-    const user = users.find(user => user.id === id)
-    return res.json(user)
-})
-.patch((req,res)=>{
+// if route same so we can do this type
+app
+  .route("/api/users/:id")
+  .get((req, res) => {
+    const id = parseInt(req.params.id);
+    const user = users.find((user) => user.id === id);
+    return res.json(user);
+  })
+  .patch((req, res) => {
     // Edit user with ID
-    return  res.json({status:"Pending"})
-})
-.delete((req,res)=>{
-    // Delete user with ID
-    return  res.json({status:"Pending"})
-})
 
+    const id = parseInt(req.params.id);
+    const body = req.body;
 
-app.post('/api/users',(req,res)=>{
-    //TODO: Create new user
-    return res.json({
-        status:"Pending"
+    // find user index
+    const index = users.findIndex((user) => user.id === id);
+
+    if (index === -1) {
+      return res.status(404).json({ status: "User not found" });
+    }
+
+    // update the user (merge old data + new data)
+    users[index] = {
+      ...users[index],
+      ...body,
+    };
+
+    // save updated users list
+    fs.writeFile("./USER_DATA.json", JSON.stringify(users), () => {
+      return res.json({
+        status: "User Updated",
+        user: users[index],
+      });
     });
-})
+  })
+  .delete((req, res) => {
+    // Delete user with ID
+    const id = parseInt(req.params.id);
+
+    const checkUser = users.find((user) => user.id === id);
+    if (!checkUser) {
+      return res.status(404).json({ message: "User not Found" });
+    }
+    console.log(checkUser);
+    const updatedUsers = users.filter((user) => user.id !== id);
+    console.log(updatedUsers);
+    fs.writeFile("./USER_DATA.json", JSON.stringify(updatedUsers), () => {
+      return res.json({ status: "User Deleted", id: id });
+    });
+  });
+
+app.post("/api/users", (req, res) => {
+  //TODO: Create new user
+  const body = req.body;
+
+  users.push({ id: users.length + 1, ...body });
+  fs.writeFile("./USER_DATA.json", JSON.stringify(users), (err, data) => {
+    return res.json({
+      status: "Success",
+      id: users.length,
+    });
+  });
+});
 
 // app.get('/api/users/:id',(req,res)=>{
 //     const id =parseInt(req.params.id);
@@ -60,8 +102,6 @@ app.post('/api/users',(req,res)=>{
 //     });
 // })
 
-
-
 app.listen(3000, () => {
-  console.log("Server started");
+  console.log("Server started : 3000");
 });
