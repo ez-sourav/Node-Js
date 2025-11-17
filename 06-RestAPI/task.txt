@@ -15,4 +15,4 @@ POST /api/users - Create new user  - Done
 PATCH /api/users/1 - Edit the user With Id 1  - Done
 
 
-DELETE /api/users/1 - Delete the user With Id 1
+DELETE /api/users/1 - Delete the user With Id 1  - Done
