@@ -16,8 +16,6 @@ app.use((req,res,next) =>{
 
 
 
-
-
 app.get("/users", (req, res) => {
   const html = `
     <ul>
@@ -29,6 +27,7 @@ app.get("/users", (req, res) => {
 
 //Routes
 app.get("/api/users", (req, res) => {
+  res.setHeader("X-MyName","Sourav Biswas");
   return res.json(users);
 });
 
