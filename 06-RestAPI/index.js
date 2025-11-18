@@ -3,7 +3,20 @@ const users = require("./USER_DATA.json");
 const fs = require("fs");
 
 const app = express();
+
+//Middleware - Plugin
 app.use(express.urlencoded({ extended: false }));
+
+app.use((req,res,next) =>{
+  fs.appendFile('./log.txt',`\n ${new Date().toLocaleString()} : IP Address - ${req.ip}, Method:${req.method}, Path : ${req.path}\n`,(err,data)=>{
+   next() 
+    })
+  
+})
+
+
+
+
 
 app.get("/users", (req, res) => {
   const html = `
