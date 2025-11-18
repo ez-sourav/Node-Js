@@ -40,3 +40,13 @@
  11/18/2025, 6:28:25 PM : IP Address - ::1, Method:GET, Path : /users
 
  11/18/2025, 6:28:36 PM : IP Address - ::1, Method:GET, Path : /api/users
+
+ 11/18/2025, 7:29:17 PM : IP Address - ::1, Method:POST, Path : /api/users
+
+ 11/18/2025, 7:29:31 PM : IP Address - ::1, Method:GET, Path : /api/users
+
+ 11/18/2025, 7:34:35 PM : IP Address - ::1, Method:GET, Path : /api/users
+
+ 11/18/2025, 7:34:42 PM : IP Address - ::1, Method:GET, Path : /api/users/20000
+
+ 11/18/2025, 7:34:44 PM : IP Address - ::1, Method:GET, Path : /favicon.ico
