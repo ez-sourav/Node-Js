@@ -37,6 +37,9 @@ app
   .get((req, res) => {
     const id = parseInt(req.params.id);
     const user = users.find((user) => user.id === id);
+    if(!user){
+      res.status(404).json({error:"User Not Found"})
+    }
     return res.json(user);
   })
   .patch((req, res) => {
@@ -88,7 +91,7 @@ app.post("/api/users", (req, res) => {
 
   users.push({ id: users.length + 1, ...body });
   fs.writeFile("./USER_DATA.json", JSON.stringify(users), (err, data) => {
-    return res.json({
+    return res.status(201).json({
       status: "Success",
       id: users.length,
     });
