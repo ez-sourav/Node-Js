@@ -34,3 +34,9 @@
  11/18/2025, 6:15:35 PM : IP Address - ::1, Method:GET, Path : /api/users/
 
  11/18/2025, 6:15:44 PM : IP Address - ::1, Method:GET, Path : /api/users/502
+
+ 11/18/2025, 6:28:11 PM : IP Address - ::1, Method:GET, Path : /api/users/50
+
+ 11/18/2025, 6:28:25 PM : IP Address - ::1, Method:GET, Path : /users
+
+ 11/18/2025, 6:28:36 PM : IP Address - ::1, Method:GET, Path : /api/users
