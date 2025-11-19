@@ -74,7 +74,7 @@ app.get("/users", async (req, res) => {
 app.get("/api/users", async (req, res) => {
   const allDbUsers = await User.find({});
 
-  res.setHeader("X-MyName", "Sourav Biswas");
+  // res.setHeader("X-MyName", "Sourav Biswas");
   return res.json(allDbUsers);
 });
 
@@ -92,14 +92,14 @@ app
     }
     return res.json(user);
   })
-  .patch(async(req, res) => {
+  .patch(async (req, res) => {
     // Edit user with ID
 
     // const id = parseInt(req.params.id);
     // const body = req.body;
 
-    await User.findByIdAndUpdate(req.params.id,{lastName:"Changed"})
-    return res.json({status:"Success"});
+    await User.findByIdAndUpdate(req.params.id, { lastName: req.body.last_name});
+    return res.json({ status: "Success" });
 
     // find user index
     // const index = users.findIndex((user) => user.id === id);
@@ -122,7 +122,7 @@ app
     //   });
     // });
   })
-  .delete(async(req, res) => {
+  .delete(async (req, res) => {
     // Delete user with ID
     // const id = parseInt(req.params.id);
     // const checkUser = users.find((user) => user.id === id);
@@ -136,8 +136,8 @@ app
     //   return res.json({ status: "User Deleted", id: id });
     // });
 
-    await User.findByIdAndDelete(req.params.id)
-    return res.json({ status: "User Deleted", id:req.params.id});
+    await User.findByIdAndDelete(req.params.id);
+    return res.json({ status: "User Deleted", id: req.params.id });
   });
 
 app.post("/api/users", async (req, res) => {
