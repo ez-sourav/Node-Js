@@ -50,3 +50,9 @@
  11/18/2025, 7:34:42 PM : IP Address - ::1, Method:GET, Path : /api/users/20000
 
  11/18/2025, 7:34:44 PM : IP Address - ::1, Method:GET, Path : /favicon.ico
+
+ 11/19/2025, 7:11:59 PM : IP Address - ::1, Method:POST, Path : /api/users/
+
+ 11/19/2025, 7:14:48 PM : IP Address - ::1, Method:POST, Path : /api/users/
+
+ 11/19/2025, 7:16:45 PM : IP Address - ::1, Method:POST, Path : /api/users/
