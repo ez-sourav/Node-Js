@@ -1,8 +1,33 @@
 const express = require("express");
 const users = require("./USER_DATA.json");
+const mongoose = require("mongoose");
 const fs = require("fs");
+const { type } = require("os");
 
 const app = express();
+
+// Schema
+const userSchema = new mongoose.Schema({
+  firstName:{
+    type :String,
+    required:true,
+  },
+  lastName:{
+    type :String,
+  },
+  email:{
+    type :String,
+    required:true,
+    unique:true,
+  },
+  jobTitle:{
+    type:String,
+  },
+  gender:{
+    type:String
+  }
+})
+
 
 //Middleware - Plugin
 app.use(express.urlencoded({ extended: false }));
