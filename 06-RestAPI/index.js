@@ -63,7 +63,7 @@ app.get("/users", async (req, res) => {
   const html = `
     <ul>
     ${allDbUsers
-      .map((user) => `<li> <b>${user.firstName}</b> - ${user.email}</li>`)
+      .map((user) => `<li> <b> ${user.firstName} ${user.lastName} </b> - ${user.email}</li>`)
       .join("")}
     </ul>
     `;
@@ -98,7 +98,13 @@ app
     // const id = parseInt(req.params.id);
     // const body = req.body;
 
-    await User.findByIdAndUpdate(req.params.id, { lastName: req.body.last_name});
+    await User.findByIdAndUpdate(req.params.id, {
+      firstName:req.body.first_name,
+      lastName: req.body.last_name,
+      email:req.body.email,
+      gender:req.body.gender,
+      jobTitle:req.body.job_title
+    });
     return res.json({ status: "Success" });
 
     // find user index
