@@ -1,5 +1,5 @@
 const express = require("express");
-const users = require("./USER_DATA.json");
+// const users = require("./USER_DATA.json");
 const mongoose = require("mongoose");
 const fs = require("fs");
 const { type } = require("os");
@@ -15,26 +15,29 @@ mongoose
   .catch((err) => console.log("Mongo error : ", err));
 
 // Schema
-const userSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    jobTitle: {
+      type: String,
+    },
+    gender: {
+      type: String,
+    },
   },
-  lastName: {
-    type: String,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  jobTitle: {
-    type: String,
-  },
-  gender: {
-    type: String,
-  },
-},{timestamps:true});
+  { timestamps: true }
+);
 
 // Model
 const User = mongoose.model("user", userSchema);
@@ -54,76 +57,90 @@ app.use((req, res, next) => {
   );
 });
 
-app.get("/users", (req, res) => {
+app.get("/users", async (req, res) => {
+  const allDbUsers = await User.find({});
+
   const html = `
     <ul>
-    ${users.map((user) => `<li>${user.first_name}</li>`).join("")}
+    ${allDbUsers
+      .map((user) => `<li> <b>${user.firstName}</b> - ${user.email}</li>`)
+      .join("")}
     </ul>
     `;
   res.send(html);
 });
 
 //Routes
-app.get("/api/users", (req, res) => {
+app.get("/api/users", async (req, res) => {
+  const allDbUsers = await User.find({});
+
   res.setHeader("X-MyName", "Sourav Biswas");
-  return res.json(users);
+  return res.json(allDbUsers);
 });
 
 // if route same so we can do this type
 app
   .route("/api/users/:id")
-  .get((req, res) => {
+  .get(async (req, res) => {
+    /* 
     const id = parseInt(req.params.id);
     const user = users.find((user) => user.id === id);
+    */
+    const user = await User.findById(req.params.id);
     if (!user) {
       res.status(404).json({ error: "User Not Found" });
     }
     return res.json(user);
   })
-  .patch((req, res) => {
+  .patch(async(req, res) => {
     // Edit user with ID
 
-    const id = parseInt(req.params.id);
-    const body = req.body;
+    // const id = parseInt(req.params.id);
+    // const body = req.body;
+
+    await User.findByIdAndUpdate(req.params.id,{lastName:"Changed"})
+    return res.json({status:"Success"});
 
     // find user index
-    const index = users.findIndex((user) => user.id === id);
+    // const index = users.findIndex((user) => user.id === id);
 
-    if (index === -1) {
-      return res.status(404).json({ status: "User not found" });
-    }
+    // if (index === -1) {
+    //   return res.status(404).json({ status: "User not found" });
+    // }
 
     // update the user (merge old data + new data)
-    users[index] = {
-      ...users[index],
-      ...body,
-    };
+    // users[index] = {
+    //   ...users[index],
+    //   ...body,
+    // };
 
     // save updated users list
-    fs.writeFile("./USER_DATA.json", JSON.stringify(users), () => {
-      return res.json({
-        status: "User Updated",
-        user: users[index],
-      });
-    });
+    // fs.writeFile("./USER_DATA.json", JSON.stringify(users), () => {
+    //   return res.json({
+    //     status: "User Updated",
+    //     user: users[index],
+    //   });
+    // });
   })
-  .delete((req, res) => {
+  .delete(async(req, res) => {
     // Delete user with ID
-    const id = parseInt(req.params.id);
+    // const id = parseInt(req.params.id);
+    // const checkUser = users.find((user) => user.id === id);
+    // if (!checkUser) {
+    //   return res.status(404).json({ message: "User not Found" });
+    // }
+    // console.log(checkUser);
+    // const updatedUsers = users.filter((user) => user.id !== id);
+    // console.log(updatedUsers);
+    // fs.writeFile("./USER_DATA.json", JSON.stringify(updatedUsers), () => {
+    //   return res.json({ status: "User Deleted", id: id });
+    // });
 
-    const checkUser = users.find((user) => user.id === id);
-    if (!checkUser) {
-      return res.status(404).json({ message: "User not Found" });
-    }
-    console.log(checkUser);
-    const updatedUsers = users.filter((user) => user.id !== id);
-    console.log(updatedUsers);
-    fs.writeFile("./USER_DATA.json", JSON.stringify(updatedUsers), () => {
-      return res.json({ status: "User Deleted", id: id });
-    });
+    await User.findByIdAndDelete(req.params.id)
+    return res.json({ status: "User Deleted", id:req.params.id});
   });
 
-app.post("/api/users", async(req, res) => {
+app.post("/api/users", async (req, res) => {
   //TODO: Create new user
   const body = req.body;
   if (
@@ -145,22 +162,19 @@ app.post("/api/users", async(req, res) => {
   //   });
   // });
 
-  // now we do help of mongoose 
+  // now we do help of mongoose
 
-  const result  = await User.create({
-    firstName:body.first_name,
-    lastName:body.last_name,
-    email:body.email,
-    gender:body.gender,
-    jobTitle:body.job_title,
+  const result = await User.create({
+    firstName: body.first_name,
+    lastName: body.last_name,
+    email: body.email,
+    gender: body.gender,
+    jobTitle: body.job_title,
   });
 
-
   return res.status(201).json({
-      status: "Success",
-      
-    });
-
+    status: "Success",
+  });
 });
 
 // app.get('/api/users/:id',(req,res)=>{
