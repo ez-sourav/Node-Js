@@ -11,7 +11,10 @@ async function handelGenerateNewShortURL(req, res) {
     visitHistory: [],
   });
 
-  return res.json({ id: shortID });
+  return res.render('home',{
+     id: shortID
+  })
+  // return res.json({ id: shortID });
 }
 
 async function handelGetAnalytics(req, res) {
@@ -23,7 +26,25 @@ async function handelGetAnalytics(req, res) {
   });
 }
 
+async function deleteGenerateNewShortURL(req, res) {
+  const shortId = req.params.shortId;
+  console.log(shortId);
+  const deletedUrl = await URL.findOneAndDelete({ shortId });
+
+  if (!deletedUrl) {
+    return res.status(404).json({ message: "URL not found" });
+  }
+
+  return res.json({ 
+    shortID:shortId,
+    message: "Deleted successfully",
+    redirectURL: deletedUrl.redirectURL 
+  });
+}
+
+
 module.exports = {
   handelGenerateNewShortURL,
-  handelGetAnalytics
+  handelGetAnalytics,
+  deleteGenerateNewShortURL
 };
