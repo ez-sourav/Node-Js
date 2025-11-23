@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const URL = require("../models/url");
+const { v4: uuidv4 } = require("uuid");
+const { setUser } = require("../service/auth");
 
 async function handelUserSignup(req, res) {
   const { name, email, password } = req.body;
@@ -8,11 +10,10 @@ async function handelUserSignup(req, res) {
     email,
     password,
   });
-//   const allurls = await URL.find({});
+  //   const allurls = await URL.find({});
 
-//   return res.render("home", { urls: allurls, id: null });
-  return res.redirect('/')
-
+  //   return res.render("home", { urls: allurls, id: null });
+  return res.redirect("/");
 }
 async function handelUserLogin(req, res) {
   const { email, password } = req.body;
@@ -21,16 +22,22 @@ async function handelUserLogin(req, res) {
     password,
   });
 
-  if(!user) return res.render('login',{
-    error: 'Invalid Email or Password'
-  })
-//   const allurls = await URL.find({});
+  if (!user)
+    return res.render("login", {
+      error: "Invalid Email or Password",
+    });
+  //   const allurls = await URL.find({});
 
-//   return res.render("home", { urls: allurls, id: null });
-  return res.redirect('/')
+  //   return res.render("home", { urls: allurls, id: null });
+
+  const sessionId = uuidv4();
+  setUser(sessionId,user)
+  res.cookie('uid',sessionId)
+
+  return res.redirect("/");
 }
 
 module.exports = {
   handelUserSignup,
-  handelUserLogin
+  handelUserLogin,
 };
