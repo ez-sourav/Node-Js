@@ -11,10 +11,12 @@ async function handelGenerateNewShortURL(req, res) {
     visitHistory: [],
   });
 
-  return res.render('home',{
-     id: shortID
-  })
-  // return res.json({ id: shortID });
+  const allurls = await URL.find({});
+
+  return res.render("home", {
+    id: shortID,
+    urls: allurls,
+  });
 }
 
 async function handelGetAnalytics(req, res) {
@@ -35,16 +37,15 @@ async function deleteGenerateNewShortURL(req, res) {
     return res.status(404).json({ message: "URL not found" });
   }
 
-  return res.json({ 
-    shortID:shortId,
+  return res.json({
+    shortID: shortId,
     message: "Deleted successfully",
-    redirectURL: deletedUrl.redirectURL 
+    redirectURL: deletedUrl.redirectURL,
   });
 }
-
 
 module.exports = {
   handelGenerateNewShortURL,
   handelGetAnalytics,
-  deleteGenerateNewShortURL
+  deleteGenerateNewShortURL,
 };
