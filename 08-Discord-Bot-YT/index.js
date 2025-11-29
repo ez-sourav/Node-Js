@@ -9,7 +9,7 @@ client.on('messageCreate',message =>{
     message.reply({
         content:"Hi From Bot"
     })
-    console.log(message.content);
+    // console.log(message.content);
 })
 
 client.login(process.env.DISCORD_TOKEN);
