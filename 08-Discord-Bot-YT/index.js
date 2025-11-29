@@ -5,10 +5,10 @@ dotenv.config();
 const client = new Client({ intents : [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
 client.on('messageCreate',message =>{
-    // if(message.author.bot) return;
-    // message.reply({
-    //     content:"Hi From Bot"
-    // })
+    if(message.author.bot) return;
+    message.reply({
+        content:"Hi From Bot"
+    })
     console.log(message.content);
 })
 
