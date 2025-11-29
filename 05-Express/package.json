@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "start": "nodemon index"
+  },
+  
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
