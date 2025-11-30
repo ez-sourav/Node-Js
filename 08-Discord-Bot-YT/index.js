@@ -1,4 +1,4 @@
-import { Client,  GatewayIntentBits } from 'discord.js';
+import { Client,  GatewayIntentBits, MessageActivityType } from 'discord.js';
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -6,6 +6,12 @@ const client = new Client({ intents : [GatewayIntentBits.Guilds, GatewayIntentBi
 
 client.on('messageCreate',message =>{
     if(message.author.bot) return;
+    if(message.content.startsWith('create')){
+        const url = message.content.split('create')[1];
+        return message.reply({
+            content:'Generting Short ID For ' + url,
+        })
+    }
     message.reply({
         content:"Hi From Bot"
     })
