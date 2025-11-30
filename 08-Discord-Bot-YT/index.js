@@ -12,4 +12,9 @@ client.on('messageCreate',message =>{
     // console.log(message.content);
 })
 
+client.on('interactionCreate',interaction =>{
+    console.log(interaction);
+    interaction.reply("Pong!! ")
+})
+
 client.login(process.env.DISCORD_TOKEN);
