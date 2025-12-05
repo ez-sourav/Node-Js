@@ -7,12 +7,14 @@ const PORT = 3000;
 
 const storage = multer.diskStorage({
   destination: function(req,file,cb){
-
+    return cb(null, './uploads')
   },filename: function(req,file,cb){
-
+    return cb(null, `${new Date().getDate()}-${new Date().getMonth()}-${new Date().getFullYear()}-${file.originalname}`)
   }
 });
-const upload = multer({ dest: 'uploads/' })
+
+const upload = multer({ storage: storage })
+
 
 app.set("view engine","ejs");
 app.set('views',path.resolve('./views'));
