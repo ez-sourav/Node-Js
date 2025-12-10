@@ -17,3 +17,7 @@ const blogSchema = new Schema({
         ref: "user",
     }
 },{timestamps:true});
+
+const Blog = mondel('blog',blogSchema);
+
+module.exports =Blog;
