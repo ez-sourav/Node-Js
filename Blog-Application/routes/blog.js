@@ -1,60 +1,138 @@
 const { Router } = require("express");
-const multer = require("multer");
-const path = require("path");
+const { requireLogin } = require("../middlewares/requireLogin");
+const upload = require("../middlewares/upload");
+
 const Blog = require("../models/blog");
 const Comment = require("../models/comment");
 const router = Router();
+const mongoose = require("mongoose");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.resolve(`./public/uploads/`));
-  },
-  filename: function (req, file, cb) {
-    const fileName = `${Date.now()}-${file.originalname}`;
-    cb(null, fileName);
-  },
+// edit blog
+
+const { checkBlogOwner } = require("../middlewares/checkBlogOwner");
+
+router.get("/edit/:id", requireLogin, checkBlogOwner, (req, res) => {
+  res.render("editBlog", {
+    user: req.user,
+    blog: req.blog,
+  });
 });
 
-const upload = multer({ storage: storage });
+router.post(
+  "/edit/:id",
+  requireLogin,
+  checkBlogOwner,
+  upload.single("coverImage"),
+  async (req, res) => {
+    const { title, body } = req.body;
 
-router.get("/add-new", (req, res) => {
+    const updateData = {
+      title,
+      body,
+    };
+
+    // if new image uploaded
+    if (req.file) {
+      updateData.coverImageURL = req.file.path;
+    }
+
+    await Blog.findByIdAndUpdate(req.params.id, updateData);
+
+    res.redirect(`/blog/${req.params.id}`);
+  }
+);
+
+// delete blog
+
+router.post("/delete/:id", requireLogin, checkBlogOwner, async (req, res) => {
+  await req.blog.deleteOne();
+
+  res.redirect("/?deleted=true");
+});
+
+
+router.get("/add-new", requireLogin, (req, res) => {
   return res.render("addBlogs", {
     user: req.user,
   });
 });
 
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
 
+  //  Validate ObjectId
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).render("404", {
+      user: req.user,
+      message: "Blog not found or invalid URL",
+    });
+  }
 
-router.get("/:id",async (req, res) => {
-  const blog = await Blog.findById(req.params.id).populate('createdBy')
-  const comments = await Comment.find({blogId:req.params.id}).populate('createdBy')
-  console.log(comments);
-  return res.render('blog',{
-    user:req.user,
+  // Query DB safely
+  const blog = await Blog.findById(id).populate("createdBy");
+
+  if (!blog) {
+    return res.status(404).render("404", {
+      user: req.user,
+      message: "Blog not found or has been deleted",
+    });
+  }
+
+  const comments = await Comment.find({ blogId: id }).populate("createdBy");
+
+  // for upload time
+  const timeAgo = (date) => {
+  const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+
+  let interval = seconds / 31536000;
+  if (interval > 1) return Math.floor(interval) + " years ago";
+
+  interval = seconds / 2592000;
+  if (interval > 1) return Math.floor(interval) + " months ago";
+
+  interval = seconds / 86400;
+  if (interval > 1) return Math.floor(interval) + " days ago";
+
+  interval = seconds / 3600;
+  if (interval > 1) return Math.floor(interval) + " hours ago";
+
+  interval = seconds / 60;
+  if (interval > 1) return Math.floor(interval) + " minutes ago";
+
+  return "Just now";
+};
+
+  return res.render("blog", {
+    user: req.user,
     blog,
     comments,
-  })
+    timeAgo
+  });
 });
 
-router.post('/comment/:blogId',async (req, res) => {
-   await Comment.create({
-    content:req.body.content,
-    blogId:req.params.blogId,
-    createdBy:req.user._id,
-  });
-  return res.redirect(`/blog/${req.params.blogId}`)
-})
-
-router.post("/", upload.single("coverImage"), async (req, res) => {
-  const { title, body } = req.body;
-  const blog = await Blog.create({
-    body,
-    title,
+router.post("/comment/:blogId", requireLogin, async (req, res) => {
+  await Comment.create({
+    content: req.body.content,
+    blogId: req.params.blogId,
     createdBy: req.user._id,
-    coverImageURL: `/uploads/${req.file.filename}`,
   });
-  return res.redirect(`/blog/${blog._id}`);
+  return res.redirect(`/blog/${req.params.blogId}`);
 });
 
+router.post(
+  "/",
+  requireLogin,
+  upload.single("coverImage"),
+  async (req, res) => {
+    const { title, body } = req.body;
+    const blog = await Blog.create({
+      body,
+      title,
+      createdBy: req.user._id,
+      coverImageURL: req.file.path,
+    });
+    return res.redirect(`/blog/${blog._id}`);
+  }
+);
 
 module.exports = router;
