@@ -1,34 +1,37 @@
-const {Router} = require('express')
-const User = require('../models/user')
+const { Router } = require("express");
+const User = require("../models/user");
+
+const sendSignupEmail = require("../utils/sendSignupEmail");
+const getLocationFromIP = require("../utils/getLocationFromIP");
 
 const router = Router();
 
-router.get('/signin',(req,res)=>{
-    return res.render('signin')
-})
+router.get("/signin", (req, res) => {
+  return res.render("signin");
+});
 
-router.get('/signup',(req,res)=>{
-    return res.render('signup')
-})
+router.get("/signup", (req, res) => {
+  return res.render("signup");
+});
 
-router.post('/signin', async (req, res) => {
-  const {email, password } = req.body;
+router.post("/signin", async (req, res) => {
+  const { email, password } = req.body;
   try {
-  const token = await User.matchPasswordAndGenerateToken(email,password);
-  
-  return res.cookie('token',token).redirect('/');
+    const token = await User.matchPasswordAndGenerateToken(email, password);
+
+    return res.cookie("token", token).redirect("/");
   } catch (error) {
-    return res.render('signin',{
-      error:"Incorrect Email or Password",
-    })
+    return res.render("signin", {
+      error: "Incorrect Email or Password",
+    });
   }
 });
 
-router.get('/logout',(req,res)=>{
-  res.clearCookie('token').redirect('/')
-})
+router.get("/logout", (req, res) => {
+  res.clearCookie("token").redirect("/");
+});
 
-router.post('/signup', async (req, res) => {
+router.post("/signup", async (req, res) => {
   const { fullName, email, password } = req.body;
 
   try {
@@ -40,17 +43,30 @@ router.post('/signup', async (req, res) => {
 
     await user.save();
 
-    return res.redirect('/');
+    // Get location with details
+
+    const location = await getLocationFromIP(req.userIP);
+
+    await sendSignupEmail({
+      name: user.fullName,
+      email: user.email,
+      ip: req.userIP,
+      device: req.headers["user-agent"],
+      city: location.city,
+      region: location.region,
+      country: location.country,
+    });
+
+    return res.redirect("/");
   } catch (error) {
     // DUPLICATE EMAIL ERROR
     if (error.code === 11000) {
-      return res.render('signup', {
+      return res.render("signup", {
         error: "Email already exists. Please use another email.",
       });
     }
 
-    
-    return res.render('signup', {
+    return res.render("signup", {
       error: "Something went wrong. Please try again.",
     });
   }
