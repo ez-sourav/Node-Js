@@ -1,44 +1,42 @@
-const nodemailer = require("nodemailer");
+const axios = require("axios");
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.ADMIN_EMAIL,
-    pass: process.env.ADMIN_EMAIL_PASS,
-  },
-});
-
-const sendSignupEmail = async ({
-  name,
-  email,
-  ip,
-  device,
-  city,
-  region,
-  country,
-}) => {
-  const signupTime = new Date().toLocaleString("en-IN");
-
-  const message = `
+const sendSignupEmail = async (data) => {
+  try {
+    await axios.post(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        sender: {
+          name: "Blogify",
+          email: "bm5633302@gmail.com", // VERIFIED sender in Brevo
+        },
+        to: [
+          {
+            email: "projectperpose04@gmail.com", // where you want notifications
+          },
+        ],
+        subject: "New Blogify Signup",
+        textContent: `
 New Blogify Signup
 
-Name: ${name}
-Email: ${email}
-Signup Time: ${signupTime}
-IP Address: ${ip}
-City: ${city}
-Region: ${region}
-Country: ${country}
-Device: ${device}
-`;
-
-  await transporter.sendMail({
-    from: `"Blogify" <${process.env.ADMIN_EMAIL}>`,
-    to: process.env.ADMIN_EMAIL,
-    subject: "New Blogify Signup",
-    text: message,
-  });
+Name: ${data.name}
+Email: ${data.email}
+Signup Time: ${new Date().toLocaleString("en-IN")}
+City: ${data.city}
+Country: ${data.country}
+Device: ${data.device}
+        `,
+      },
+      {
+        headers: {
+          "api-key": process.env.BREVO_API_KEY,
+          "Content-Type": "application/json",
+        },
+        timeout: 5000,
+      }
+    );
+  } catch (err) {
+    // ❗ SILENT FAIL (never block signup)
+  }
 };
-
 
 module.exports = sendSignupEmail;
