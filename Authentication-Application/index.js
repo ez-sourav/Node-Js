@@ -3,13 +3,15 @@ const express = require('express');
 const PORT = 3000;
 const app = express();
 const connectDB = require('./config/db')
-const authRoute = require('./routes/signup')
+const signup = require('./routes/signup')
+const login = require('./routes/login')
 
 connectDB();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use('/',authRoute);
+app.use('/',signup);
+app.use('/',login);
 
 app.get('/',(req,res)=>{
     res.send("Server is running...");
