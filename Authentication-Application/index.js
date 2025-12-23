@@ -1,6 +1,6 @@
 require('dotenv').config()
 const express = require('express');
-const PORT = 3000;
+const PORT = process.env.PORT;
 const app = express();
 const connectDB = require('./config/db')
 const signup = require('./routes/signup')
@@ -13,14 +13,18 @@ connectDB();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser())
+
 app.use('/',signup);
 app.use('/',login);
 app.use('/',logout);
 
-app.use(cookieParser())
 
 app.get('/dashboard',auth ,(req,res)=>{
-    res.send("Welcome to Dashboard");
+    res.json({
+    message: "Welcome to Dashboard",
+    user: req.user,
+  });
 })
 
 app.listen(PORT,(req,res)=>{
