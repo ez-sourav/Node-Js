@@ -1,14 +1,26 @@
-const jwt = require('jsonwebtoken');
-const auth = (req,res,next)=>{
-    const token = req.cookies.token;
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
-    if(!token) return res.json({
-        message:"Not Logged in ",
-    })
+const auth = async (req, res, next) => {
+  const token = req.cookies.token;
 
-    const decoded = jwt.verify(token,process.env.JWT_SECRET);
-    req.user = decoded;
+  if (!token) {
+    return res.redirect("/login");
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.redirect("/login");
+    }
+
+    req.user = user; // 👈 store full user
     next();
+  } catch (err) {
+    return res.redirect("/login");
+  }
 };
 
-module.exports = auth
+module.exports = auth;
