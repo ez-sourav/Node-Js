@@ -4,7 +4,6 @@ const router = express.Router();
 
 router.post("/logout", (req, res) => {
   res.clearCookie("token");
-  res.send("Logged out");
+  res.redirect("/login?success=Logged out successfully");
 });
-
 module.exports = router

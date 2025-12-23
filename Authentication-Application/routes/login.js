@@ -26,9 +26,7 @@ router.post("/login", async (req, res) => {
     });
 
     res.cookie("token", token, { httpOnly: true });
-     return res.status(200).json({
-      message: "Login successful",
-    });
+    return res.redirect("/dashboard?success=Login successful");
   } catch (err) {
     res.status(500).send("login failed");
   }
