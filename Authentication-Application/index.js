@@ -9,6 +9,7 @@ const logout = require('./routes/logout')
 const auth = require('./middleware/auth')
 const cookieParser = require('cookie-parser')
 const guest = require("./middleware/guest");
+const jwt = require("jsonwebtoken");
 
 connectDB();
 
@@ -41,6 +42,22 @@ app.get("/dashboard", auth, (req, res) => {
     user: req.user,
     success: req.query.success || null,
   });
+});
+
+
+app.get("/", (req, res) => {
+  const token = req.cookies.token;
+
+  if (token) {
+    try {
+      jwt.verify(token, process.env.JWT_SECRET);
+      return res.redirect("/dashboard");
+    } catch (err) {
+      return res.render("home", { success: null });
+    }
+  }
+
+  res.render("home", { success: req.query.success || null });
 });
 
 app.listen(PORT,(req,res)=>{
