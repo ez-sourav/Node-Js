@@ -1,6 +1,10 @@
 const fs = require('fs');
 
-fs.writeFile("hey.txt","",(cb)=>{
-    if(cb) console.error(cb);
+// fs.writeFile("hey.txt","Hi \n",(cb)=>{
+//     if(cb) console.error(cb);
+//     else console.log("Done");
+// })
+fs.appendFile("hey.txt","Hello \n",(err)=>{
+    if(err) console.log(err);
     else console.log("Done");
 })
