@@ -1,4 +1,5 @@
 const fs = require('fs');
+const http = require('http');
 
 // fs.writeFile("hey.txt","Hi \n",(cb)=>{
 //     if(cb) console.error(cb);
@@ -41,7 +42,14 @@ const fs = require('fs');
 //     console.log(data);
 // })
 
-fs.readdir('./folder',(err,data)=>{
-    if(err) throw err;
-    console.log(data);
+// fs.readdir('./folder',(err,data)=>{
+//     if(err) throw err;
+//     console.log(data);
+// })
+
+// HTTP 
+
+const server = http.createServer((req,res)=>{
+    res.end("Hello World");
 })
+server.listen(3000)
