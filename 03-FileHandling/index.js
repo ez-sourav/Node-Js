@@ -10,7 +10,7 @@ const fs = require('fs');
 //     else console.log("Done");
 // })
 
-// fs.rename("hey.txt","new.txt",(err)=>{
+// fs.rename("./new folder","folder",(err)=>{
 //     if(err) throw err;
 //     else console.log("Rename the FIle");
 // })
@@ -21,7 +21,27 @@ const fs = require('fs');
 
 // })
 
-fs.unlink('./copy/copy.txt',(err)=>{
+// fs.unlink('./folder', { recursive: true, force: true },(err)=>{
+//     if(err) throw err;
+//     console.log("File Deleted");
+// })
+
+// fs.rm('./copy',{recursive:true} ,(err)=>{
+//     if(err) throw err;
+//     console.log("Delete");
+// })
+
+// fs.mkdir("./new folder/text.txt",(err)=>{
+//     if(err) throw err;
+//     console.log(("Created Folder"));
+// })
+
+// fs.readFile('new.txt','utf8',(err,data)=>{
+//     if(err) throw err ;
+//     console.log(data);
+// })
+
+fs.readdir('./folder',(err,data)=>{
     if(err) throw err;
-    console.log("File Deleted");
+    console.log(data);
 })
