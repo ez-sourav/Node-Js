@@ -10,7 +10,14 @@ const fs = require('fs');
 //     else console.log("Done");
 // })
 
-fs.rename("hey.txt","new.txt",(err)=>{
+// fs.rename("hey.txt","new.txt",(err)=>{
+//     if(err) throw err;
+//     else console.log("Rename the FIle");
+// })
+
+fs.copyFile("new.txt","./copy/copy.txt",(err)=>{
     if(err) throw err;
-    else console.log("Rename the FIle");
+    else console.log(("Copy File"));
+
 })
+
