@@ -14,11 +14,13 @@
           <input
             class="block w-full rounded-md outline-none text px-5 py-2 bg-zinc-800"
             type="text"
+            required
             placeholder="Title Goes Here"
             name="title"
           />
           <textarea
             name="details"
+            required
             class="block w-full rounded-md outline-none text px-5 mt-2 py-2 resize-none bg-zinc-800"
             placeholder="Write Your Task Details"
           ></textarea>
@@ -35,7 +37,10 @@
           <h1 class="text-white text-2xl tracking-tighter">
             <%= el %>
           </h1>
-          <a class="text-blue-500 inline-block mt-3" href="">Read More</a>
+          <div class="flex w-full justify-between item-center  mt-3">
+            <a class="text-blue-500 inline-block" href="/file/<%=el%>">Read More</a>
+            <a class="text-zinc-500 inline-block" href="/edit/<%=el%>">Edit File Name</a>
+          </div>
         </div>
         <% }) %> <% }else{ %>
         <h3 class="text-gray-600">No Tasks Yet</h3>
