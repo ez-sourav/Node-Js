@@ -9,32 +9,32 @@
   </head>
   <body>
     <div class="main w-full min-h-screen text-white bg-zinc-900 p-10">
-        <a class="text-blue-500 inline-block mb-10 " href="/">Go Back to Home</a>
-        <form action="/edit" method="post">
+      <a class="text-blue-500 inline-block mb-10" href="/">Go Back to Home</a>
+      <form action="/edit" method="post">
         <label class="mb-2 block" for="">Previous Name</label>
-          <input
-  class="block w-1/4 rounded-md outline-none text-zinc-500 px-5 py-2 bg-zinc-800 pointer-events-none select-none"
-  type="text"
-  name="previous"
-  value="<%= filename %>"
-  readonly
-/>
+        <input
+          class="block w-1/4 rounded-md outline-none text-zinc-500 px-5 py-2 bg-zinc-800 pointer-events-none select-none"
+          type="text"
+          name="previous"
+          value="<%= filename %>"
+          readonly
+        />
 
         <label class="mt-5 block" for="">New Name</label>
-          <input
-            class="block w-1/4 rounded-md outline-none text px-5 py-2 mt-3 bg-zinc-800"
-            type="text"
-            required
-            placeholder="New Name"
-            name="new"
-          />
-          
-          <input
-            class="mt-3 bg-yellow-600 px-5 py-2 rounded-md"
-            type="submit"
-            value="Update File Name"
-          />
-        </form>
+        <input
+          class="block w-1/4 rounded-md outline-none text px-5 py-2 mt-3 bg-zinc-800"
+          type="text"
+          required
+          placeholder="New Name"
+          name="new"
+        />
+
+        <input
+          class="mt-3 bg-yellow-600 px-5 py-2 rounded-md"
+          type="submit"
+          value="Update File Name"
+        />
+      </form>
     </div>
   </body>
 </html>
