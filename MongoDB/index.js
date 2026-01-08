@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const usermodel = require('./useModel')
 
 app.get('/',(req,res)=>{
     res.send("Hello World")
