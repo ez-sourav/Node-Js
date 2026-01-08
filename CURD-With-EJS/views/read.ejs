@@ -9,18 +9,56 @@
 </head>
 <body>
     <div class="w-full h-full bg-zinc-900 p-10 text-white">
-        <h1 class="text-3xl traking-tighter mb-3">All Users</h1>
-        <div class="users">
-            <div class="user max-w-72 p-4 bg-zinc-800 rounded-lg">
-                <div class="w-full h-52 rounded-lg bg-red-500 "></div>
-                <h3 class="text-xl mt-3 traking-tighter">Sourav Biswas</h3>
-                <h3 class="text-zinc-500">sporav@gmail.com</h3>
-                <div class="flex mt-10 gap-3">
-                    <a class="text-zinc-200" href="">Edit User</a>
-                    <a class="text-red-500" href="">Delete User</a>
-                </div>
+    <a class="text-blue-500" href="/">Back to Home Page</a>
+
+    <h1 class="text-3xl tracking-tighter mt-3 mb-3">All Users</h1>
+
+    <div class="users flex gap-3 flex-wrap">
+
+      <% if (users && users.length > 0) { %>
+
+        <% users.forEach(user => { %>
+          <div class="user w-72 p-4 bg-zinc-800 rounded-lg">
+            <div class="w-full h-52 rounded-lg bg-zinc-700 overflow-hidden">
+              <img
+                class="w-full h-full object-cover object-top"
+                src="<%= user.imageurl %>"
+                alt="User Image"
+              >
             </div>
+
+            <h3 class="text-xl mt-3 tracking-tighter">
+              <%= user.name %>
+            </h3>
+
+            <h3 class="text-zinc-500">
+              <%= user.email %>
+            </h3>
+
+            <div class="flex mt-10 justify-between gap-3">
+              <a class="text-zinc-200" href="">Edit User</a>
+              <a class="text-red-500" href="/delete/<%= user._id %>">Delete User</a>
+            </div>
+          </div>
+        <% }) %>
+
+      <% } else { %>
+
+        <div class="w-full mt-20">
+          <p class="text-zinc-400 text-xl">
+            No users found 
+          </p>
+          <a
+            href="/"
+            class="inline-block mt-4 px-6 py-2 bg-blue-600 rounded-lg text-white hover:bg-blue-700"
+          >
+            Create First User
+          </a>
         </div>
+
+      <% } %>
+
     </div>
+  </div>
 </body>
 </html>
