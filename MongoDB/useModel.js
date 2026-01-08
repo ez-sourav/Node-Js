@@ -6,8 +6,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/usermodel')
 
 const userSchema = mongoose.Schema({
     name:String,
-    usename:String,
+    username:String,
     email:String,
-})
+},{timestamps:true})
 
 module.exports = mongoose.model('user',userSchema);
