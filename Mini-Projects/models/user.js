@@ -1,21 +1,22 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
- mongoose.connect('mongodb://127.0.0.1:27017/miniprojectdb')
- .then(()=> console.log("MongoDb Connected Successfully"))
- .catch((err)=> console.log("Error in MongoDb:",err))
+mongoose
+  .connect("mongodb://127.0.0.1:27017/miniprojectdb")
+  .then(() => console.log("MongoDb Connected Successfully"))
+  .catch((err) => console.log("Error in MongoDb:", err));
 
 const userSchema = mongoose.Schema({
-    username:String,
-    name:String,
-    age:Number,
-    email:String,
-    password:String,
-    posts:[
-        {
-            type:mongoose.Schema.Types.ObjectId,
-            ref:'post'
-        }
-    ]
-}) 
+  username: String,
+  name: String,
+  age: Number,
+  email: String,
+  password: String,
+  posts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "post",
+    },
+  ],
+});
 
-module.exports = mongoose.model('user',userSchema)
+module.exports = mongoose.model("user", userSchema);
