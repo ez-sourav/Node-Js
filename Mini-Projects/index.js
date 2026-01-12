@@ -45,7 +45,7 @@ app.get("/login", (req, res) => {
   res.render("login");
 });
 app.get("/profile", isLogdedIn, (req, res) => {
-    console.log(req.user);
+  console.log(req.user);
   res.redirect("login");
 });
 
@@ -53,29 +53,29 @@ app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const checkUser = await userModel.findOne({ email });
   if (!checkUser) return res.send("Something Went Worng");
-  bcrypt.compare(password,checkUser.password,(err,result)=>{
-    if(result) {
-        const token = jwt.sign({ email, userId: checkUser._id }, "secret");
-        res.cookie("token", token);
-        res.status(200).send("Login Successfully")
-    } else{
-        res.redirect('login')
-    } 
-  })
+  bcrypt.compare(password, checkUser.password, (err, result) => {
+    if (result) {
+      const token = jwt.sign({ email, userId: checkUser._id }, "secret");
+      res.cookie("token", token);
+      res.status(200).send("Login Successfully");
+    } else {
+      res.redirect("login");
+    }
+  });
 });
 
-app.get('/logout',(req,res)=>{
-    res.cookie('token',"");
-    res.redirect('login')
-})
+app.get("/logout", (req, res) => {
+  res.cookie("token", "");
+  res.redirect("login");
+});
 
-function isLogdedIn(req,res,next){
-    if(req.cookies.token === "") res.send("You Must Be Logged In");
-    else{
-        const data = jwt.verify(req.cookies.token,"secret")
-        req.user = data
-        next();
-    }
+function isLogdedIn(req, res, next) {
+  if (req.cookies.token === "") res.send("You Must Be Logged In");
+  else {
+    const data = jwt.verify(req.cookies.token, "secret");
+    req.user = data;
+    next();
+  }
 }
 
 app.listen(3000, () => {
