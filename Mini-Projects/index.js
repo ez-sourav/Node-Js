@@ -74,8 +74,8 @@ function isLogdedIn(req,res,next){
     else{
         const data = jwt.verify(req.cookies.token,"secret")
         req.user = data
+        next();
     }
-    next();
 }
 
 app.listen(3000, () => {
