@@ -6,58 +6,80 @@
     <title>Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
+
   <body>
     <div class="min-h-screen p-10 bg-zinc-900 text-white font-sans">
+      
+      
       <div class="w-full flex justify-end">
         <a
-          class="px-3 py-2 bg-red-500 rounded-md text-sm mb-5 inline-block"
+          class="px-4 py-2 bg-red-500 hover:bg-red-600 transition rounded-md text-sm mb-6"
           href="/logout"
-          >Logout</a
         >
+          Logout
+        </a>
       </div>
-      <h1 class="mb-3 text-[22px]">Hello, <%= user.name %> 👋</h1>
-      <h5 class="mb-5">You Can Create A Post</h5>
-      <form action="post" method="post">
+
+      
+      <h1 class="mb-2 text-2xl font-semibold">
+        Hello, <%= user.name %> 👋
+      </h1>
+      <p class="mb-6 text-zinc-400">You can create a post below</p>
+
+      
+      <form action="post" method="post" class="mb-20">
         <textarea
-          class="resize-none block outline-none w-1/3 p-3 bg-transparent border-2 border-zinc-800 rounded-md"
+          class="resize-none block outline-none w-1/3 p-3 bg-zinc-800 border border-zinc-700 rounded-md focus:border-blue-500"
           name="content"
-          placeholder="Wath's on your mind?"
+          placeholder="What's on your mind?"
         ></textarea>
+
         <input
           type="submit"
-          class="block text-sm w-40 px-3 py-2 bg-blue-500 rounded-md mt-2"
+          class="block text-sm w-40 px-3 py-2 bg-blue-500 hover:bg-blue-600 transition rounded-md mt-3"
           value="Create New Post"
         />
       </form>
-      <div class="posts mt-20">
-        <h3 class="text-zinc-400">Your Posts</h3>
-        <div class="postcontainer mt-5">
 
-            <% if (user.posts.length>0) { %>
-             
-                
-                <% user.posts.reverse().forEach(post => { %>
-                    <div
-                    class="post w-1/3 p-4 mb-4 rounded-md border-[1px] border-zinc-700 bg-zinc-800"
-                    >
-                    <h4 class="text-lg font-semibold text-blue-500 mb-2">
-                        @<%= user.username %>
-                    </h4>
-                    <p class="text-sm tracking-tight">
-                        <%= post.content %>
-                    </p>
-                    <div class="btns flex gap-4 mt-5">
-                        <a class="text-blue-500" href="">Like</a>
-                        <a class="text-zinc-600" href="">Edit</a>
-                    </div>
-                </div>
-                
-                <% }) %>
-                <% } else { %>
     
-   <h1>No posts yet</h1>
-  <p>Create your first post to get started.</p>
-<% }%>
+      <div class="posts">
+        <h3 class="text-zinc-400 text-lg mb-4">Your Posts</h3>
+
+        <div class="postcontainer space-y-4">
+          <% if (user.posts.length > 0) { %>
+
+            <% user.posts.reverse().forEach(post => { %>
+              <div
+                class="post w-1/3 p-4 rounded-md border border-zinc-700 bg-zinc-800"
+              >
+                <h4 class="text-lg font-semibold text-blue-400 mb-2">
+                  @<%= user.username %>
+                </h4>
+
+                <p class="text-sm text-zinc-200 leading-relaxed">
+                  <%= post.content %>
+                </p>
+
+                <div class="btns flex gap-6 mt-4 text-sm">
+                  <a class="text-blue-500 hover:underline" href="">Like</a>
+                  <a class="text-zinc-400 hover:text-zinc-200" href="">Edit</a>
+                </div>
+              </div>
+            <% }) %>
+
+          <% } else { %>
+
+            <!-- Empty State -->
+            <div
+              class="w-1/3 p-6 text-center border border-dashed border-zinc-700 rounded-md bg-zinc-800"
+            >
+              <h1 class="text-lg font-semibold mb-2">No posts yet</h1>
+              <p class="text-zinc-400 text-sm">
+                Create your first post to get started 🚀
+              </p>
+            </div>
+
+          <% } %>
         </div>
       </div>
     </div>
