@@ -59,9 +59,9 @@
                 <p class="text-sm text-zinc-200 leading-relaxed">
                   <%= post.content %>
                 </p>
-
-                <div class="btns flex gap-6 mt-4 text-sm">
-                  <a class="text-blue-500 hover:underline" href="">Like</a>
+                <small class="mt-2 inline-block"><%= post.likes.length %> likes</small>
+                <div class="btns flex gap-6 mt-1 text-sm">
+                  <a class="text-blue-500 hover:underline" href="/like/<%= post._id %>">Like</a>
                   <a class="text-zinc-400 hover:text-zinc-200" href="">Edit</a>
                 </div>
               </div>
