@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const user = require("./models/user");
+const post = require("./models/post");
 
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -48,6 +49,17 @@ app.get("/login", (req, res) => {
 app.get("/profile", isLogdedIn,async (req, res) => {
   const user = await userModel.findOne({email:req.user.email}).populate('posts')
   res.render("profile",{user});
+});
+
+app.get("/like/:id", isLogdedIn,async (req, res) => {
+  const post = await postModel.findOne({_id:req.params.id}).populate('user')
+  if(post.likes.indexOf(req.user.userId) === -1){
+    post.likes.push(req.user.userId)
+  }else{
+    post.likes.splice(post.likes.indexOf(req.user.userId),1)
+  }
+  await post.save()
+  res.redirect("/profile");
 });
 
 app.post("/post", isLogdedIn,async (req, res) => {
