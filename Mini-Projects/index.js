@@ -6,8 +6,8 @@ const postModel = require("./models/post");
 const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const user = require("./models/user");
-const post = require("./models/post");
+const multerconfig = require("./config/multerConfig");
+
 
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -34,7 +34,7 @@ app.post("/register", async (req, res) => {
         });
         const token = jwt.sign({ email, userId: user._id }, "secret");
         res.cookie("token", token);
-        res.json({ user, message: "User Created Successfully" });
+        res.redirect('/login');
       });
     });
   } else {
