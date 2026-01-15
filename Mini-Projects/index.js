@@ -23,8 +23,11 @@ app.get("/profile/upload", (req, res) => {
   res.render("profileUpload");
 });
 
-app.post("/upload",isLogdedIn, upload.single('image'), (req, res) => {
-  console.log(req.file);
+app.post("/upload",isLogdedIn, upload.single('image'), async(req, res) => {
+  const user = await userModel.findOne({email:req.user.email});
+  user.profilepic = req.file.filename
+  await user.save()
+  res.redirect('/profile')
 });
 
 app.post("/register", async (req, res) => {
