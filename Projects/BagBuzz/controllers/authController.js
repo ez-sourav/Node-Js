@@ -7,7 +7,10 @@ const registerUser = async (req, res) => {
   try {
     const { email, fullname, password } = req.body;
     const user = await userModel.findOne({email:email})
-    if(user) return res.status(401).send("You alreday have an account, please login.")
+    if(user){
+      req.flash('error',"You alreday have an account, please login.")
+      return res.redirect('/');
+    }
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(password, salt, async (err, hashedPassword) => {
         if (err) return res.send(err.message);
@@ -32,20 +35,30 @@ const registerUser = async (req, res) => {
 const loginUser = async (req,res)=>{
     const {email,password} = req.body;
     const user = await userModel.findOne({email:email})
-    if(!user) return res.send("Email or Password inccorect")
+    if(!user){
+      req.flash("error","Email or Password inccorect")
+      return res.redirect('/');
+    }
     
     bcrypt.compare(password,user.password,(err,result)=>{
         if(result){
             const token = generateToken(user);
             res.cookie('token',token)
-            res.send("You Can Login")
+            res.redirect('/shop')
         }else{
-            return res.status(401).send("Email or Password inccorect")
+          req.flash('error',"Email or Password inccorect")
+          return res.redirect('/')
         }
     })
 };
 
+const logout = (req,res)=>{
+  res.cookie('token',"");
+  res.redirect('/');
+}
+
 module.exports = {
   registerUser,
-  loginUser
+  loginUser,
+  logout,
 };
