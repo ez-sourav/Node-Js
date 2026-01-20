@@ -1,58 +1,107 @@
 <%- include('./partials/header') %>
-<% if(success.length>0){ %>
-        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-blue-500">
-            <span class="inline-block mt-1 mb-1 text-white">
-                <%= success %>
-            </span>
-        </div>
-        <% } %>
-        
-    <div class="w-full h-screen flex items-start px-20 py-20">
-        <div class="w-[25%] flex h-screen flex-col items-start">
-            <div class="flex items-center gap-2">
-                <h3>sort by</h3>
-                <form action="/shop">
-                    <select class="border-[1px] px-2 py-1" name="sortby" id="">
-                        <option value="popular">Popular</option>
-                        <option value="newest">Newest</option>
-                    </select>
-                </form>
-            </div>
-            <div class="flex flex-col mt-20">
-                <a class="block w-fit mb-2" href="">New Collection</a>
-                <a class="block w-fit mb-2" href="">All Products</a>
-                <a class="block w-fit mb-2" href="">Discounted Products</a>
-            </div>
-            <div class="mt-32">
-                <a class="block w-fit mb-2" href="">Filter by :</a>
-                <a class="block w-fit mb-2" href="">Availability</a>
-                <a class="block w-fit mb-2" href="">Discount</a>
-            </div>
-        </div>
-        <div class="w-[75%] flex flex-col gap-5 h-screen">
-            <div class="flex items-start gap-5">
-                <% products.forEach(function(product){ %>
-                    <div class="w-60">
-                        <div class="w-full h-52 flex items-center justify-center bg-[<%= product.bgcolor %>]">
-                            <img class="h-[12rem]" src="data:image/jpeg;base64,<%= product.image.toString('base64') %>"
-                                alt="">
-                        </div>
-                        <div
-                            class="flex justify-between bg-[<%= product.panelcolor %>] items-center px-4 py-4 text-[<%= product.textcolor %>]">
-                            <div>
-                                <h3>
-                                    <%= product.name %>
-                                </h3>
-                                <h4>₹ <%= product.price %>
-                                </h4>
-                            </div>
-                            <a class="w-7 h-7 flex items-center justify-center rounded-full bg-white" href="/addtocart/<%= product._id %>">
-                                <i class="ri-add-line text-black text-xl"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <% }) %>
-            </div>
-        </div>
+
+
+<% if (typeof success !== 'undefined' && success.length > 0) { %>
+  <div class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
+    <%= success %>
+  </div>
+<% } %>
+
+<div class="min-h-screen bg-gray-100 px-16 py-12 flex gap-10">
+
+  
+  <aside class="w-[22%] bg-white rounded-xl shadow p-6 h-fit sticky top-24">
+
+   
+    <div class="mb-8">
+      <h3 class="text-lg font-semibold mb-3">Sort By</h3>
+      <form action="/shop" method="GET">
+        <select 
+          name="sortby"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+        >
+          <option value="popular">Popular</option>
+          <option value="newest">Newest</option>
+        </select>
+      </form>
     </div>
-    <%- include('./partials/footer') %>
+
+    
+    <div class="mb-10">
+      <h3 class="text-lg font-semibold mb-4">Categories</h3>
+      <div class="flex flex-col gap-3 text-gray-600">
+        <a href="#" class="hover:text-black transition">New Collection</a>
+        <a href="#" class="hover:text-black transition">All Products</a>
+        <a href="#" class="hover:text-black transition">Discounted Products</a>
+      </div>
+    </div>
+
+   
+    <div>
+      <h3 class="text-lg font-semibold mb-4">Filters</h3>
+      <div class="flex flex-col gap-3 text-gray-600">
+        <a href="#" class="hover:text-black transition">Availability</a>
+        <a href="#" class="hover:text-black transition">Discount</a>
+      </div>
+    </div>
+
+  </aside>
+
+  <main class="w-[78%]">
+
+    <% if (Array.isArray(products) && products.length > 0) { %>
+
+      <div class="grid grid-cols-4 gap-8">
+
+        <% products.forEach(function(product){ %>
+          <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+
+            
+            <div class="h-56 bg-gray-200 flex items-center justify-center">
+              <% if (product.image) { %>
+                <img 
+                  class="h-44 object-contain"
+                  src="data:image/jpeg;base64,<%= product.image.toString('base64') %>"
+                  alt="<%= product.name %>"
+                >
+              <% } else { %>
+                <span class="text-gray-400 text-sm">No Image</span>
+              <% } %>
+            </div>
+
+           
+            <div class="px-4 py-4 flex justify-between items-center bg-white">
+              <div>
+                <h3 class="font-semibold text-sm text-gray-800 mb-1">
+                  <%= product.name %>
+                </h3>
+                <p class="font-bold text-gray-900">₹ <%= product.price %></p>
+              </div>
+
+              
+              <a 
+                href="/addtocart/<%= product._id %>"
+                class="w-9 h-9 flex items-center justify-center rounded-full bg-black text-white hover:scale-110 transition"
+              >
+                <i class="ri-add-line text-xl"></i>
+              </a>
+            </div>
+
+          </div>
+        <% }) %>
+
+      </div>
+
+    <% } else { %>
+
+      
+      <div class="text-center text-gray-500 mt-24 text-lg">
+        No products found.
+      </div>
+
+    <% } %>
+
+  </main>
+</div>
+
+<%- include('./partials/footer') %>
