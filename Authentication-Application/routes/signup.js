@@ -5,28 +5,28 @@ const User = require('../models/user')
 
 const router = express.Router();
 
-router.post('/signup', async (req,res)=>{
+router.post('/signup', async (req, res) => {
 
-    try{
+    try {
 
-        const {userName,email,password} = req.body;
-        if(!userName || !email || !password){
+        const { userName, email, password } = req.body;
+        if (!userName || !email || !password) {
             return res.status(400).send("All field are required");
         }
-        
-        const existingUser = await User.findOne({email});
-        if(existingUser) return res.status(400).send("User alredy exists");
-        
-        const hashedPassword = await bcrypt.hash(password,10);
-        
+
+        const existingUser = await User.findOne({ email });
+        if (existingUser) return res.status(400).send("User alredy exists");
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         await User.create({
             userName,
             email,
-            password:hashedPassword
+            password: hashedPassword
         });
-        
+
         res.redirect('/login');
-    }catch(error){   
+    } catch (error) {
         res.status(500).send("Server erorr");
     }
 })
