@@ -19,9 +19,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser())
 
-app.use('/',signup);
-app.use('/',login);
-app.use('/',logout);
+app.use('/', signup);
+app.use('/', login);
+app.use('/', logout);
 
 
 app.get("/login", guest, (req, res) => {
@@ -60,6 +60,6 @@ app.get("/", (req, res) => {
   res.render("home", { success: req.query.success || null });
 });
 
-app.listen(PORT,(req,res)=>{
-    console.log(`Server Started At ${PORT}`);
+app.listen(PORT, (req, res) => {
+  console.log(`Server Started At ${PORT}`);
 })
